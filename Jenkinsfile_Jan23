@@ -10,10 +10,10 @@ node{
       sh "${mavenHome}/bin/mvn clean package"
       //bat "${mavenHome}/mvn clean package"
   }
+  /*
   stage('3codeQuality'){
       sh "${mavenHome}/bin/mvn clean sonar:sonar"
   }
-  /*
   stage('4uploadArtifacts'){
       sh "${mavenHome}/bin/mvn deploy"
   }
