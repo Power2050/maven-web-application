@@ -1,66 +1,79 @@
 pipeline{
-  agent any 
-  tools {
-    maven "maven3.6.0"
-  }  
-  stages {
-    stage('1GetCode'){
-      steps{
-        sh "echo 'cloning the latest application version' "
-        git branch: 'feature', credentialsId: 'gitHubCredentials', url: 'https://github.com/LandmakTechnology/maven-web-application'
-      }
+    agent any
+    tools {
+        maven "maven3.6.0"
     }
-    stage('3Test+Build'){
-      steps{
-        sh "echo 'running JUnit-test-cases' "
-        sh "echo 'testing must passed to create artifacts ' "
-        sh "mvn clean package"
-      }
+    stages {
+        stage('1GetCode'){
+            steps{
+                sh "echo 'cloning the latest application version' "
+                //git "https://github.com/Power2050/maven-web-application"
+                git branch: 'feature', credentialsId: 'gitHubCredentials', url: 'https://github.com/Power2050/maven-web-application'
+            }
+    }
+    //stage('2Testing'){}
+    stage('3Test&Build'){
+        steps{
+            sh "echo 'running JUnit-test-cases' "
+            sh "echo 'testing must pass to create artifacts' "
+            sh "mvn clean package"
+        }
     }
     /*
-    stage('4CodeQuality'){
-      steps{
-        sh "echo 'Perfoming CodeQualityAnalysis' "
-        sh "mvn sonar:sonar"
-      }
+    stage('4codeQuality'){
+        steps{
+            sh "echo 'performing CodeQualityAnalysis' "
+            sh "mvn sonar:sonar"
+        }
     }
-    stage('5uploadNexus'){
-      steps{
-        sh "mvn deploy"
-      }
-    } 
-    stage('8deploy2prod'){
-      steps{
-        deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
-      }
-    }
-}
-  post{
-    always{
-      emailext body: '''Hey guys
+	stage('5uploadNexus'){
+	    steps{
+	        sh "mvn deploy"
+	    }
+	}
+	
+	//stage('6deploy2UAT'){}
+	//stage('7approvalGate'){}
+	stage('8deploy2Prod'){
+	    steps{
+	        deploy adapters: [tomcat9(credentialsId: 'tomcat-credentials', path: '', url: 'http://172.31.81.159:8080/')], contextPath: null, war: 'target/*war'
+	    }
+	}
+	/*
+	stage('9emailNotification'){}
+	*/
+	}
+
+
+    post {
+	    always{
+	    emailext body: '''Hey guys
+
 Please check build status.
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
-    }
-    success{
-      emailext body: '''Hey guys
-Good job build and deployment is successful.
+Thanks 
+JD from Landmark
+555-555-5555''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'joshdow222@gmail.com'
+	}
+	success{
+	    emailext body: '''Hey guys
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
-    } 
-    failure{
-      emailext body: '''Hey guys
+Good job build and deployment is successful
+
+Thanks 
+JD from Landmark
+555-555-5555''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'joshdow222@gmail.com'
+	}
+	failure{
+	    emailext body: '''Hey guys
+
 Build failed. Please resolve issues.
 
-Thanks
-Landmark 
-+1 437 215 2483''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'paypal-team@gmail.com'
+Thanks 
+JD from Landmark
+555-555-5555''', recipientProviders: [buildUser(), developers()], subject: 'success', to: 'joshdow222@gmail.com'
+	}
     }
-  } 
-  */
-}
-}
+    */
+    }
+
