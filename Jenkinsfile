@@ -44,7 +44,7 @@ pipeline{
 	*/
 	}
 
-
+/*
     post {
 	    always{
 	    emailext body: '''Hey guys
@@ -76,4 +76,3 @@ JD from Landmark
     }
     */
     }
-}
